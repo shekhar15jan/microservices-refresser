@@ -1,5 +1,6 @@
 package com.chandrashekhar.bookstore.catelog.domain;
 
+import com.chandrashekhar.bookstore.catelog.ApplicationProperties;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional //to rollback transaction if it fails
@@ -42,5 +44,10 @@ class ProductServiceImpl implements ProductService{
                 productPage.hasPrevious()
         );
         return pageResult;
+    }
+
+    @Override
+    public Optional<Product> getProductByCode(String code) {
+        return productRepository.findByCode(code).map(ProductMapper::toProduct);
     }
 }

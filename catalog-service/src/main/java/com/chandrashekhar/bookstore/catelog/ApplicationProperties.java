@@ -1,4 +1,4 @@
-package com.chandrashekhar.bookstore.catelog.domain;
+package com.chandrashekhar.bookstore.catelog;
 
 import jakarta.validation.constraints.Min;
 import org.springframework.boot.context.properties.ConfigurationProperties;
