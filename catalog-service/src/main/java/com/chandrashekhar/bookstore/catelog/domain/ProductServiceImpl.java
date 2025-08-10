@@ -2,23 +2,21 @@ package com.chandrashekhar.bookstore.catelog.domain;
 
 import com.chandrashekhar.bookstore.catelog.ApplicationProperties;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-@Transactional //to rollback transaction if it fails
-class ProductServiceImpl implements ProductService{
+@Transactional // to rollback transaction if it fails
+class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ApplicationProperties applicationProperties;
 
-    ProductServiceImpl(ProductRepository productRepository, ApplicationProperties applicationProperties){
+    ProductServiceImpl(ProductRepository productRepository, ApplicationProperties applicationProperties) {
         this.productRepository = productRepository;
         this.applicationProperties = applicationProperties;
     }
@@ -26,23 +24,21 @@ class ProductServiceImpl implements ProductService{
     @Override
     public PageResult<Product> getProducts(int pageNo) {
         Sort sort = Sort.by("name").ascending();
-        pageNo = pageNo <= 1 ? 0: pageNo -1; // page number stats from 0 in java hence managing it
-        Pageable  pageable = PageRequest.of(pageNo,applicationProperties.pageSize(), sort);
-//        Page<Product> productPage = productRepository.findAll(pageable)
-//                .map(productEntity -> ProductMapper.toProduct(productEntity));
-        Page<Product> productPage = productRepository.findAll(pageable)
-                .map(ProductMapper::toProduct);
+        pageNo = pageNo <= 1 ? 0 : pageNo - 1; // page number stats from 0 in java hence managing it
+        Pageable pageable = PageRequest.of(pageNo, applicationProperties.pageSize(), sort);
+        //        Page<Product> productPage = productRepository.findAll(pageable)
+        //                .map(productEntity -> ProductMapper.toProduct(productEntity));
+        Page<Product> productPage = productRepository.findAll(pageable).map(ProductMapper::toProduct);
 
         PageResult<Product> pageResult = new PageResult<>(
                 productPage.getContent(),
                 productPage.getTotalElements(),
-                productPage.getNumber() +1,
+                productPage.getNumber() + 1,
                 productPage.getTotalPages(),
                 productPage.isFirst(),
                 productPage.isLast(),
                 productPage.hasNext(),
-                productPage.hasPrevious()
-        );
+                productPage.hasPrevious());
         return pageResult;
     }
 
